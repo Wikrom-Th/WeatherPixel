@@ -1,0 +1,5 @@
+# this is a dependency requirement for python
+# use `pip install -r requirements.txt` to install these
+
+pyserial
+requests
