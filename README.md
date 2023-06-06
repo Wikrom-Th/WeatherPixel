@@ -15,3 +15,7 @@
  ## Running the program
  1. Compile and Upload [lighting.ino](./arduino_src/lighting/lighting.ino) to your arduino board (with Neopixel connected to it)
  2. Run [main.py](./main.py)
+
+ ## Potential TODOs
+ - Weather Forecast
+ - More precise lighting controls
