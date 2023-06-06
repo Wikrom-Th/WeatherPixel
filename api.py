@@ -12,6 +12,7 @@ class ApiProvider(Enum):
     GOOGLE = 2
 
 DEFAULT_GEOCODING_PROVIDER = ApiProvider.OPENWEATHER
+KELVIN_CELCIUS = 273.15
 
 try:
     from secret import GOOGLE_MAPS_API_KEY
@@ -69,5 +70,33 @@ class Weather(Api):
     def __init__(self):
         super().__init__(WEATHER_API_URL, WEATHER_API_KEY)
 
-    def get_current_weather(self, lat, lon):
+    def get_current(self, lat, lon):
         self.api_request(self.req_url + f"weather?lat={lat}&lon={lon}&appid={self.api_key}")
+
+    def get_forecast(self, lat, lon):
+        self.api_request(self.req_url + f"forecast?lat={lat}&lon={lon}&appid={self.api_key}")
+
+class ApiManager():
+    def __init__(self):
+        self.loc_api = Location()
+        self.geocoder = Geocoder()
+        self.weather_api = Weather()
+
+        self.weather = {}
+        self.temp = -1
+
+    def get_curr_loc(self):
+        self.loc_api.api_request()
+        self.lat, self.lon = self.loc_api.data['loc'].split(",")
+
+    def get_input_loc(self, input):
+        self.geocoder.get_lat_lon(input)
+        self.lat, self.lon = self.geocoder.coords['lat'], self.geocoder.coords['lon']
+
+    def get_curr_weather(self):
+        self.weather_api.get_current(self.lat, self.lon)
+        self.weather['status'] = self.weather_api.data['weather'][0]['main']
+        self.weather['temp'] = round(float(self.weather_api.data['main']['temp']) - KELVIN_CELCIUS, 2)
+
+    def get_forecast_weather(self):
+        self.weather_api.get_forecast(self.lat, self.lon)

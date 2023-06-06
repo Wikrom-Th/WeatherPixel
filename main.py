@@ -1,18 +1,11 @@
-from api import Location, Weather, Geocoder, ApiProvider
+from api import ApiManager
 
-# loc = Location()
-# loc.api_request()
+apimanager = ApiManager()
 
-# lat, lon = loc.data['loc'].split(",")
+apimanager.get_curr_loc()
+apimanager.get_curr_weather()
+print(apimanager.weather)
 
-geo = Geocoder()
-geo.get_lat_lon("Nakhon Pathom")
-
-print(geo.coords)
-
-lat, lon = geo.coords['lat'], geo.coords['lon']
-
-weather = Weather()
-weather.get_current_weather(lat, lon)
-
-print(weather.data)
+apimanager.get_input_loc("London")
+apimanager.get_curr_weather()
+print(apimanager.weather)
