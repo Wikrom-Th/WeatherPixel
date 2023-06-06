@@ -1,4 +1,4 @@
-from api import ApiManager
+from src.api import ApiManager
 import customtkinter
 
 class MyApp(customtkinter.CTk):
