@@ -1,11 +1,13 @@
-from api import ApiManager
+from src.api import ApiManager
+from src.gui import MyApp
+
+import customtkinter
 
 apimanager = ApiManager()
 
-apimanager.get_curr_loc()
-apimanager.get_curr_weather()
-print(apimanager.weather)
+customtkinter.set_appearance_mode("system")
 
-apimanager.get_input_loc("London")
-apimanager.get_curr_weather()
-print(apimanager.weather)
+app = MyApp(apimanager)
+app.geometry("800x600")
+
+app.mainloop()

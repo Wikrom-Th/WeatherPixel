@@ -5,9 +5,13 @@
  - Python3
  - Arduino or supporting boards
  
- ## Installation
+ ## Setup
  1. Install [Adafruit NeoPixel Library](https://github.com/adafruit/Adafruit_NeoPixel) on Arduino IDE
  2. Install requirements on python side with `pip install -r requirements.txt`
- 3. Make a `secret.py` in the repository folder
+ 3. Make a `src/secret.py`
     - Put your [OpenWeather API Key](https://openweathermap.org/api) in the format of `WEATHER_API_KEY = "your_api_key"`
     - (Optional) Put your [Google Maps API Key](https://developers.google.com/maps) in the format of `GOOGLE_MAPS_API_KEY = "your_api_key"`
+
+ ## Running the program
+ 1. Compile and Upload [lighting.ino](./arduino_src/lighting/lighting.ino) to your arduino board (with Neopixel connected to it)
+ 2. Run [main.py](./main.py)

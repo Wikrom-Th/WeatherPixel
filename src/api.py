@@ -82,15 +82,18 @@ class ApiManager():
         self.geocoder = Geocoder()
         self.weather_api = Weather()
 
+        self.loc_text = ""
         self.weather = {}
         self.temp = -1
 
     def get_curr_loc(self):
         self.loc_api.api_request()
+        self.loc_text = f"{self.loc_api.data['city']}, {self.loc_api.data['region']}, {self.loc_api.data['country']}"
         self.lat, self.lon = self.loc_api.data['loc'].split(",")
 
     def get_input_loc(self, input):
         self.geocoder.get_lat_lon(input)
+        self.loc_text = input
         self.lat, self.lon = self.geocoder.coords['lat'], self.geocoder.coords['lon']
 
     def get_curr_weather(self):

@@ -3,3 +3,4 @@
 
 pyserial
 requests
+customtkinter==5.1.3
