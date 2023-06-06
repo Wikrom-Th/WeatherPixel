@@ -7,7 +7,9 @@
 // Declare our NeoPixel strip object:
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
-int value; //read from serial
+int hueMin;
+int hueMax;
+bool blink;
 
 void setup() {
   Serial.begin(9600);
@@ -20,32 +22,38 @@ void setup() {
 
 void loop() {
   while(!Serial.available());
-  value = Serial.readString().toInt();
-  Serial.print("Temp: ");
-  Serial.print(value);
+  hueMin = Serial.readStringUntil(',').toInt();
+  hueMax = Serial.readStringUntil(',').toInt();
+  blink = Serial.readStringUntil('\n').toInt();
+  
+  Serial.print("HueMin: ");
+  Serial.println(hueMin);
 
+  Serial.print("HueMax: ");
+  Serial.println(hueMax);
 
-  if(value<0) {
-    //white
-    setStaticColor(strip.Color(255, 255, 255));
-  }
-  else if(value<=15) {
-    //light blue
-    setStaticColor(strip.Color(0,   153, 255));
-  }
-  else if(value<25) {
-    //green
-    setStaticColor(strip.Color(0,   255,   0));
-  }
-  else {
-    //red
-    setStaticColor(strip.Color(255,   0,   0));
+  setStripColor(hueMin, hueMax);
+
+  strip.show();
+  
+  if(blink) {
+    for(int i=0; i<5; i++) {
+      delay(500);
+      strip.setBrightness(5);
+      strip.show();
+      delay(500);
+      strip.setBrightness(50);
+      strip.show();
+    }
   }
 }
 
-void setStaticColor(uint32_t color) {
+void setStripColor(int hueMin, int hueMax) {
+  int hue;
+  uint32_t rgbcolor;
   for(int i=0; i<strip.numPixels(); i++) { // For each pixel in strip...
-    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
+    hue = (int) hueMin + i*((hueMax-hueMin)/(LED_COUNT-1));
+    rgbcolor = strip.ColorHSV(hue);
+    strip.setPixelColor(i, rgbcolor);         //  Set pixel's color (in RAM)
   }
-  strip.show();                          //  Update strip to match
 }

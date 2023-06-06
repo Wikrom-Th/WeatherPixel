@@ -1,10 +1,13 @@
 from src.api import ApiManager
+from src.serial_com import WeatherSerial
 import customtkinter
 
 class MyApp(customtkinter.CTk):
-    def __init__(self, apimanager: ApiManager):
+    def __init__(self, apimanager: ApiManager, serial: WeatherSerial, blink_words = ["drizzle", "rain", "snow", "thunderstorm"]):
         super().__init__()
         self.apimanager = apimanager
+        self.serial = serial
+        self.blink_words = blink_words
 
         self.frame = customtkinter.CTkFrame(master=self)
         self.frame.pack(padx=20, pady=20, fill="both", expand=True)
@@ -31,6 +34,15 @@ class MyApp(customtkinter.CTk):
         self.apimanager.get_curr_weather()
         self.weather.configure(text=self.apimanager.weather['status'])
         self.temp.configure(text=f"{self.apimanager.weather['temp']}°C")
+
+        status = self.apimanager.weather['status'].lower()
+        blink = 0
+
+        for word in self.blink_words:
+            if word in status:
+                blink = 1
+
+        self.serial.write_temp(self.apimanager.weather['temp'], blink)
 
     def get_weather_curr_loc(self):
         self.apimanager.get_curr_loc()
